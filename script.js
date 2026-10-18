@@ -1,56 +1,50 @@
-// Mobile navigation menu
-const menuToggle = document.getElementById("menu-toggle");
-const navLinks = document.getElementById("nav-links");
+const display = document.querySelector('#display');
+const message = document.querySelector('#message');
+let expression = '';
+const operators = ['+', '-', '*', '/'];
 
-menuToggle.addEventListener("click", () => {
-  const isOpen = navLinks.classList.toggle("open");
-  menuToggle.setAttribute("aria-expanded", String(isOpen));
-  menuToggle.setAttribute("aria-label", isOpen ? "Close navigation menu" : "Open navigation menu");
-});
-
-// Close the menu after selecting a navigation link
-navLinks.querySelectorAll("a").forEach((link) => {
-  link.addEventListener("click", () => {
-    navLinks.classList.remove("open");
-    menuToggle.setAttribute("aria-expanded", "false");
-    menuToggle.setAttribute("aria-label", "Open navigation menu");
-  });
-});
-
-// Keep the footer year up to date
-document.getElementById("year").textContent = new Date().getFullYear();
-
-// Show the back-to-top button after scrolling
-const backToTop = document.getElementById("back-to-top");
-
-window.addEventListener("scroll", () => {
-  backToTop.classList.toggle("visible", window.scrollY > 400);
-});
-
-backToTop.addEventListener("click", () => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-});
-
-// The contact form prepares an email in the visitor's default email app.
-// This static website does not send data to a server.
-const contactForm = document.getElementById("contact-form");
-const formNote = document.getElementById("form-note");
-
-contactForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-
-  const name = document.getElementById("name").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const message = document.getElementById("message").value.trim();
-
-  if (!name || !email || !message) {
-    formNote.textContent = "Please complete all fields before preparing your email.";
+function render() { display.value = expression || '0'; }
+document.querySelector('.keys').addEventListener('click', (event) => {
+  const button = event.target.closest('button');
+  if (!button) return;
+  message.textContent = '';
+  const action = button.dataset.action;
+  const value = button.dataset.value;
+  if (action === 'clear') { expression = ''; render(); return; }
+  if (action === 'delete') { expression = expression.slice(0, -1); render(); return; }
+  if (action === 'equals') {
+    if (!expression || !/^[0-9+*/.() -]+$/.test(expression)) {
+      message.textContent = 'Enter a valid calculation.'; return;
+    }
+    try {
+      // Evaluate only the restricted arithmetic characters allowed by the check above.
+      const result = Function('"use strict"; return (' + expression + ')')();
+      if (!Number.isFinite(result)) throw new Error('Invalid result');
+      expression = String(Number(result.toFixed(10)));
+      render();
+    } catch {
+      message.textContent = 'Invalid calculation.';
+    }
     return;
   }
-
-  const recipient = "your.email@example.com"; // Replace with your real email address.
-  const subject = encodeURIComponent(`Portfolio contact from ${name}`);
-  const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
-  formNote.textContent = "Opening your email application. If nothing happens, check that a default email app is configured.";
-  window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
+  if (value !== undefined) {
+    const last = expression.slice(-1);
+    if (operators.includes(value) && (!expression && value !== '-')) return;
+    if (operators.includes(value) && operators.includes(last)) expression = expression.slice(0, -1);
+    if (value === '.' && expression.split(/[+*/-]/).pop().includes('.')) return;
+    expression += value;
+    render();
+  }
+});
+document.addEventListener('keydown', (event) => {
+  if (/^[0-9.+*/-]$/.test(event.key)) {
+    if (operators.includes(event.key) && operators.includes(expression.slice(-1))) expression = expression.slice(0, -1);
+    expression += event.key; render();
+  } else if (event.key === 'Enter' || event.key === '=') {
+    document.querySelector('[data-action="equals"]').click();
+  } else if (event.key === 'Backspace') {
+    expression = expression.slice(0, -1); render();
+  } else if (event.key === 'Escape') {
+    expression = ''; message.textContent = ''; render();
+  }
 });
