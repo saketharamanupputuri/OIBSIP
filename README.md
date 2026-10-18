@@ -1,4 +1,4 @@
-# To Do Web App
+# Tribute Page
 
 OIBSIP Web Development & Design — Level 2 practice project.
 
@@ -15,4 +15,4 @@ OIBSIP Web Development & Design — Level 2 practice project.
 ## Before submitting
 Customize the design and text, test on desktop and mobile, take screenshots, and explain your own changes in the README/demo video.
 
-Tasks are saved in browser localStorage on this device.
+The page uses a simple decorative illustration rather than an externally sourced portrait image.
