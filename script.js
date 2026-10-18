@@ -1,82 +1,51 @@
-const form = document.querySelector('#auth-form');
-const message = document.querySelector('#message');
-const confirmWrap = document.querySelector('#confirm-wrap');
-const confirmPassword = document.querySelector('#confirm-password');
-const submitButton = document.querySelector('#submit-button');
-const tabs = [...document.querySelectorAll('.tab')];
-const authPanel = document.querySelector('#auth-panel');
-const welcomePanel = document.querySelector('#welcome-panel');
-const welcomeText = document.querySelector('#welcome-text');
-let mode = 'login';
-const STORAGE_KEY = 'oibsip-demo-users';
-const SESSION_KEY = 'oibsip-demo-session';
+const form = document.querySelector('#task-form');
+const input = document.querySelector('#task-input');
+const list = document.querySelector('#task-list');
+const count = document.querySelector('#task-count');
+const empty = document.querySelector('#empty-state');
+const clearCompleted = document.querySelector('#clear-completed');
+const STORAGE_KEY = 'oibsip-todo-tasks';
+let tasks = [];
+try { tasks = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); if (!Array.isArray(tasks)) tasks = []; }
+catch { tasks = []; }
 
-function getUsers() {
-  try {
-    const users = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-    return users && typeof users === 'object' && !Array.isArray(users) ? users : {};
-  } catch { return {}; }
+function save() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks)); }
+  catch { /* App still works for this session if browser storage is unavailable. */ }
 }
-function setMode(nextMode) {
-  mode = nextMode;
-  message.textContent = '';
-  tabs.forEach(tab => {
-    const active = tab.dataset.mode === mode;
-    tab.classList.toggle('active', active);
-    tab.setAttribute('aria-selected', String(active));
+function render() {
+  list.replaceChildren();
+  tasks.forEach((task) => {
+    const li = document.createElement('li');
+    li.className = `task${task.completed ? ' completed' : ''}`;
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox'; checkbox.checked = task.completed;
+    checkbox.setAttribute('aria-label', `Mark ${task.text} complete`);
+    checkbox.addEventListener('change', () => {
+      task.completed = checkbox.checked; save(); render();
+    });
+    const text = document.createElement('span');
+    text.className = 'task-text'; text.textContent = task.text;
+    const remove = document.createElement('button');
+    remove.className = 'delete'; remove.type = 'button'; remove.textContent = 'Delete';
+    remove.setAttribute('aria-label', `Delete ${task.text}`);
+    remove.addEventListener('click', () => {
+      tasks = tasks.filter(item => item.id !== task.id); save(); render();
+    });
+    li.append(checkbox, text, remove); list.append(li);
   });
-  confirmWrap.hidden = mode !== 'register';
-  confirmPassword.required = mode === 'register';
-  document.querySelector('#password').autocomplete = mode === 'register' ? 'new-password' : 'current-password';
-  submitButton.textContent = mode === 'register' ? 'Create account' : 'Log in';
-}
-tabs.forEach(tab => tab.addEventListener('click', () => setMode(tab.dataset.mode)));
-
-function showLoggedIn(email) {
-  authPanel.hidden = true;
-  welcomePanel.hidden = false;
-  welcomeText.textContent = `Signed in as ${email}`;
-}
-function showForm() {
-  authPanel.hidden = false;
-  welcomePanel.hidden = true;
+  const remaining = tasks.filter(task => !task.completed).length;
+  count.textContent = `${remaining} task${remaining === 1 ? '' : 's'} left`;
+  empty.hidden = tasks.length > 0;
 }
 form.addEventListener('submit', (event) => {
   event.preventDefault();
-  message.textContent = '';
-  const email = document.querySelector('#email').value.trim().toLowerCase();
-  const password = document.querySelector('#password').value;
-  if (password.length < 8) { message.textContent = 'Password must be at least 8 characters.'; return; }
-  let users = getUsers();
-  try {
-    if (mode === 'register') {
-      if (password !== confirmPassword.value) { message.textContent = 'Passwords do not match.'; return; }
-      if (Object.hasOwn(users, email)) { message.textContent = 'An account with this email already exists.'; return; }
-      // DEMO ONLY: never store plain-text passwords in a real application.
-      users[email] = password;
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
-      message.style.color = '#15803d';
-      message.textContent = 'Account created. You can now log in.';
-      setMode('login');
-      form.reset();
-      document.querySelector('#email').value = email;
-    } else {
-      if (!Object.hasOwn(users, email) || users[email] !== password) {
-        message.textContent = 'Email or password is incorrect.'; return;
-      }
-      sessionStorage.setItem(SESSION_KEY, email);
-      showLoggedIn(email);
-    }
-  } catch {
-    message.style.color = '#b91c1c';
-    message.textContent = 'Browser storage is unavailable. Try another browser or enable site storage.';
-  }
+  const text = input.value.trim();
+  if (!text) return;
+  tasks.unshift({ id: `${Date.now()}-${Math.random()}`, text, completed: false });
+  save(); render(); form.reset(); input.focus();
 });
-document.querySelector('#logout').addEventListener('click', () => {
-  sessionStorage.removeItem(SESSION_KEY);
-  showForm(); form.reset(); message.textContent = ''; setMode('login');
+clearCompleted.addEventListener('click', () => {
+  tasks = tasks.filter(task => !task.completed); save(); render();
 });
-try {
-  const sessionEmail = sessionStorage.getItem(SESSION_KEY);
-  if (sessionEmail && Object.hasOwn(getUsers(), sessionEmail)) showLoggedIn(sessionEmail);
-} catch { /* Continue in logged-out mode if storage is unavailable. */ }
+render();

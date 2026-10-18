@@ -3,36 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Demo Login | OIBSIP</title>
+  <title>My To-Do List | OIBSIP</title>
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 </head>
 <body>
-  <main class="card">
-    <div class="logo" aria-hidden="true">🔐</div>
-    <h1>Welcome</h1>
-    <p class="subtitle">A front-end login demonstration</p>
-    <div id="auth-panel">
-      <div class="tabs" role="tablist" aria-label="Authentication mode">
-        <button class="tab active" type="button" data-mode="login" role="tab" aria-selected="true">Log in</button>
-        <button class="tab" type="button" data-mode="register" role="tab" aria-selected="false">Register</button>
-      </div>
-      <form id="auth-form">
-        <label for="email">Email address</label>
-        <input id="email" type="email" autocomplete="email" placeholder="you@example.com" required>
-        <label for="password">Password</label>
-        <input id="password" type="password" autocomplete="current-password" minlength="8" placeholder="At least 8 characters" required>
-        <div id="confirm-wrap" hidden><label for="confirm-password">Confirm password</label><input id="confirm-password" type="password" autocomplete="new-password" minlength="8"></div>
-        <button class="submit" type="submit" id="submit-button">Log in</button>
-      </form>
-      <p id="message" role="status" aria-live="polite"></p>
-    </div>
-    <section id="welcome-panel" hidden>
-      <h2 id="welcome-title">You're logged in</h2>
-      <p id="welcome-text"></p>
-      <button id="logout" class="submit" type="button">Log out</button>
-    </section>
-    <p class="warning">Demo only: credentials are stored in this browser for learning. Do not use real passwords or deploy this as a real authentication system.</p>
+  <main class="app">
+    <header><p class="eyebrow">MAKE TODAY COUNT</p><h1>My To-Do List</h1><p>Small steps make big progress.</p></header>
+    <form id="task-form">
+      <label class="sr-only" for="task-input">New task</label>
+      <input id="task-input" maxlength="120" placeholder="What do you need to do?" required>
+      <button type="submit">Add task</button>
+    </form>
+    <div class="toolbar"><span id="task-count">0 tasks left</span><button id="clear-completed" class="text-button" type="button">Clear completed</button></div>
+    <ul id="task-list" aria-live="polite"></ul>
+    <p id="empty-state">No tasks yet. Add your first task above!</p>
+    <p class="note">Tasks are saved in this browser on this device.</p>
   </main>
 </body>
 </html>
