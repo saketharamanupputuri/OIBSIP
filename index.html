@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Personal portfolio of Your Name, a student and aspiring web developer.">
+  <title>Your Name | Personal Portfolio</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="navbar container" aria-label="Main navigation">
+      <a class="logo" href="#home">Your<span>Name</span></a>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Open navigation menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#contact" class="nav-contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero section" id="home">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">HELLO, I'M</p>
+          <h1>Your Name</h1>
+          <h2>Aspiring <span>Web Developer</span></h2>
+          <p class="hero-description">
+            I’m a student who enjoys learning technology and creating simple,
+            useful, and responsive websites. Welcome to my portfolio!
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#projects">View My Work</a>
+            <a class="button button-outline" href="#contact">Contact Me</a>
+          </div>
+          <div class="social-links" aria-label="Social links">
+            <!-- Replace # with your real profile URLs. -->
+            <a href="https://github.com/" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+            <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+          </div>
+        </div>
+        <div class="hero-art" aria-label="Decorative profile illustration">
+          <div class="art-circle circle-one"></div>
+          <div class="art-circle circle-two"></div>
+          <div class="profile-card">
+            <div class="avatar" aria-hidden="true">YN</div>
+            <p class="profile-label">CREATIVE • CURIOUS • CONSISTENT</p>
+            <h3>Learning by building.</h3>
+            <p>Turning ideas into web experiences.</p>
+            <div class="mini-tags"><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
+          </div>
+          <span class="floating-badge badge-code">&lt;/&gt;</span>
+          <span class="floating-badge badge-star">✦</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="about">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">GET TO KNOW ME</p>
+          <h2>About <span>Me</span></h2>
+          <p>A little introduction and what motivates me.</p>
+        </div>
+        <div class="about-grid">
+          <div class="about-mark" aria-hidden="true"><span>01</span><strong>Always<br>learning.</strong></div>
+          <div class="about-content">
+            <h3>Curious mind, practical approach.</h3>
+            <p>
+              I am a computer science student interested in web development and
+              modern technology. I enjoy understanding how websites work and
+              applying what I learn through hands-on projects.
+            </p>
+            <p>
+              My current focus is strengthening my HTML, CSS, and JavaScript
+              skills while building accessible, responsive, and user-friendly
+              websites. I believe consistent practice is the best way to improve.
+            </p>
+            <a class="text-link" href="#contact">Let's connect <span>→</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="skills">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">WHAT I'M LEARNING</p>
+          <h2>My <span>Skills</span></h2>
+          <p>Tools and skills I use to bring ideas to life.</p>
+        </div>
+        <div class="skills-grid">
+          <article class="skill-card"><div class="skill-icon">H5</div><h3>HTML5</h3><p>Building clear, semantic page structures.</p><div class="skill-track"><span style="width:85%"></span></div></article>
+          <article class="skill-card"><div class="skill-icon">C3</div><h3>CSS3</h3><p>Styling layouts and responsive designs.</p><div class="skill-track"><span style="width:75%"></span></div></article>
+          <article class="skill-card"><div class="skill-icon">JS</div><h3>JavaScript</h3><p>Adding interactions and useful behavior.</p><div class="skill-track"><span style="width:55%"></span></div></article>
+          <article class="skill-card"><div class="skill-icon">GH</div><h3>GitHub</h3><p>Sharing code and managing projects.</p><div class="skill-track"><span style="width:60%"></span></div></article>
+        </div>
+        <p class="small-note">Skill bars are illustrative. Adjust them to reflect your real experience.</p>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="projects">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">SOME THINGS I'VE MADE</p>
+          <h2>Featured <span>Projects</span></h2>
+          <p>Replace these examples with your own completed work.</p>
+        </div>
+        <div class="projects-grid">
+          <article class="project-card">
+            <div class="project-visual visual-purple"><span class="visual-window"><i></i><i></i><i></i><b>Landing Page</b><small>A clean web experience</small></span></div>
+            <div class="project-info"><p class="project-type">WEB DESIGN</p><h3>Responsive Landing Page</h3><p>A simple landing page designed with a clear layout and responsive styling.</p><div class="project-tags"><span>HTML</span><span>CSS</span></div><a href="#contact" class="text-link">Ask me about it <span>→</span></a></div>
+          </article>
+          <article class="project-card">
+            <div class="project-visual visual-blue"><div class="calculator-art"><span>12 + 8</span><strong>20</strong><div>AC　÷　×　−　+</div></div></div>
+            <div class="project-info"><p class="project-type">JAVASCRIPT</p><h3>Simple Calculator</h3><p>A beginner-friendly calculator interface for practicing JavaScript logic.</p><div class="project-tags"><span>HTML</span><span>CSS</span><span>JavaScript</span></div><a href="#contact" class="text-link">Ask me about it <span>→</span></a></div>
+          </article>
+          <article class="project-card">
+            <div class="project-visual visual-orange"><div class="todo-art"><b>Today's Tasks</b><span>✓ Learn something new</span><span>✓ Build a project</span><span>○ Review my code</span></div></div>
+            <div class="project-info"><p class="project-type">PRODUCTIVITY</p><h3>To-Do List</h3><p>A task-list concept for organizing everyday activities and practicing interactivity.</p><div class="project-tags"><span>HTML</span><span>CSS</span><span>JavaScript</span></div><a href="#contact" class="text-link">Ask me about it <span>→</span></a></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container education-grid">
+        <div>
+          <p class="eyebrow">MY JOURNEY</p>
+          <h2>Education & <span>Goals</span></h2>
+          <p class="muted">I’m building a strong foundation through coursework, practice, and projects.</p>
+        </div>
+        <div class="timeline">
+          <article><span class="timeline-dot"></span><p class="timeline-label">CURRENT</p><h3>Computer Science Student</h3><p>Learning programming fundamentals, problem-solving, and software development.</p></article>
+          <article><span class="timeline-dot"></span><p class="timeline-label">NEXT STEP</p><h3>Grow as a Developer</h3><p>Build more projects, learn new tools, and collaborate with other developers.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section contact-section" id="contact">
+      <div class="container contact-grid">
+        <div>
+          <p class="eyebrow">HAVE A PROJECT IN MIND?</p>
+          <h2>Let's work<br><span>together.</span></h2>
+          <p class="contact-intro">I’m happy to connect, learn, and discuss opportunities. Send me a message using the form.</p>
+          <div class="contact-detail"><span class="contact-symbol">@</span><div><small>EMAIL</small><p>your.email@example.com</p></div></div>
+          <div class="contact-detail"><span class="contact-symbol">⌖</span><div><small>LOCATION</small><p>Your City, India</p></div></div>
+        </div>
+        <form class="contact-form" id="contact-form">
+          <label for="name">Your name</label>
+          <input id="name" name="name" type="text" placeholder="Enter your name" required>
+          <label for="email">Email address</label>
+          <input id="email" name="email" type="email" placeholder="you@example.com" required>
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="5" placeholder="What would you like to talk about?" required></textarea>
+          <button class="button button-primary" type="submit">Prepare Email <span>→</span></button>
+          <p class="form-note" id="form-note" role="status">This form opens your email application; it does not send messages to a server.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content"><a class="logo" href="#home">Your<span>Name</span></a><p>Designed and built with HTML, CSS & JavaScript.</p><p>© <span id="year"></span> Your Name. All rights reserved.</p></div>
+  </footer>
+  <button class="back-to-top" id="back-to-top" aria-label="Back to top">↑</button>
+</body>
+</html>
