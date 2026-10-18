@@ -1,4 +1,4 @@
-# Calculator
+# Login Authentication System
 
 OIBSIP Web Development & Design — Level 2 practice project.
 
@@ -15,4 +15,4 @@ OIBSIP Web Development & Design — Level 2 practice project.
 ## Before submitting
 Customize the design and text, test on desktop and mobile, take screenshots, and explain your own changes in the README/demo video.
 
-Supports basic arithmetic and keyboard input.
+**Security note:** This is only a front-end demonstration. It stores demo passwords in browser localStorage and is not secure. Never use real credentials. A real system needs a backend, secure password hashing, HTTPS, and session management.

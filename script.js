@@ -1,50 +1,82 @@
-const display = document.querySelector('#display');
+const form = document.querySelector('#auth-form');
 const message = document.querySelector('#message');
-let expression = '';
-const operators = ['+', '-', '*', '/'];
+const confirmWrap = document.querySelector('#confirm-wrap');
+const confirmPassword = document.querySelector('#confirm-password');
+const submitButton = document.querySelector('#submit-button');
+const tabs = [...document.querySelectorAll('.tab')];
+const authPanel = document.querySelector('#auth-panel');
+const welcomePanel = document.querySelector('#welcome-panel');
+const welcomeText = document.querySelector('#welcome-text');
+let mode = 'login';
+const STORAGE_KEY = 'oibsip-demo-users';
+const SESSION_KEY = 'oibsip-demo-session';
 
-function render() { display.value = expression || '0'; }
-document.querySelector('.keys').addEventListener('click', (event) => {
-  const button = event.target.closest('button');
-  if (!button) return;
+function getUsers() {
+  try {
+    const users = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    return users && typeof users === 'object' && !Array.isArray(users) ? users : {};
+  } catch { return {}; }
+}
+function setMode(nextMode) {
+  mode = nextMode;
   message.textContent = '';
-  const action = button.dataset.action;
-  const value = button.dataset.value;
-  if (action === 'clear') { expression = ''; render(); return; }
-  if (action === 'delete') { expression = expression.slice(0, -1); render(); return; }
-  if (action === 'equals') {
-    if (!expression || !/^[0-9+*/.() -]+$/.test(expression)) {
-      message.textContent = 'Enter a valid calculation.'; return;
+  tabs.forEach(tab => {
+    const active = tab.dataset.mode === mode;
+    tab.classList.toggle('active', active);
+    tab.setAttribute('aria-selected', String(active));
+  });
+  confirmWrap.hidden = mode !== 'register';
+  confirmPassword.required = mode === 'register';
+  document.querySelector('#password').autocomplete = mode === 'register' ? 'new-password' : 'current-password';
+  submitButton.textContent = mode === 'register' ? 'Create account' : 'Log in';
+}
+tabs.forEach(tab => tab.addEventListener('click', () => setMode(tab.dataset.mode)));
+
+function showLoggedIn(email) {
+  authPanel.hidden = true;
+  welcomePanel.hidden = false;
+  welcomeText.textContent = `Signed in as ${email}`;
+}
+function showForm() {
+  authPanel.hidden = false;
+  welcomePanel.hidden = true;
+}
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+  message.textContent = '';
+  const email = document.querySelector('#email').value.trim().toLowerCase();
+  const password = document.querySelector('#password').value;
+  if (password.length < 8) { message.textContent = 'Password must be at least 8 characters.'; return; }
+  let users = getUsers();
+  try {
+    if (mode === 'register') {
+      if (password !== confirmPassword.value) { message.textContent = 'Passwords do not match.'; return; }
+      if (Object.hasOwn(users, email)) { message.textContent = 'An account with this email already exists.'; return; }
+      // DEMO ONLY: never store plain-text passwords in a real application.
+      users[email] = password;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+      message.style.color = '#15803d';
+      message.textContent = 'Account created. You can now log in.';
+      setMode('login');
+      form.reset();
+      document.querySelector('#email').value = email;
+    } else {
+      if (!Object.hasOwn(users, email) || users[email] !== password) {
+        message.textContent = 'Email or password is incorrect.'; return;
+      }
+      sessionStorage.setItem(SESSION_KEY, email);
+      showLoggedIn(email);
     }
-    try {
-      // Evaluate only the restricted arithmetic characters allowed by the check above.
-      const result = Function('"use strict"; return (' + expression + ')')();
-      if (!Number.isFinite(result)) throw new Error('Invalid result');
-      expression = String(Number(result.toFixed(10)));
-      render();
-    } catch {
-      message.textContent = 'Invalid calculation.';
-    }
-    return;
-  }
-  if (value !== undefined) {
-    const last = expression.slice(-1);
-    if (operators.includes(value) && (!expression && value !== '-')) return;
-    if (operators.includes(value) && operators.includes(last)) expression = expression.slice(0, -1);
-    if (value === '.' && expression.split(/[+*/-]/).pop().includes('.')) return;
-    expression += value;
-    render();
+  } catch {
+    message.style.color = '#b91c1c';
+    message.textContent = 'Browser storage is unavailable. Try another browser or enable site storage.';
   }
 });
-document.addEventListener('keydown', (event) => {
-  if (/^[0-9.+*/-]$/.test(event.key)) {
-    if (operators.includes(event.key) && operators.includes(expression.slice(-1))) expression = expression.slice(0, -1);
-    expression += event.key; render();
-  } else if (event.key === 'Enter' || event.key === '=') {
-    document.querySelector('[data-action="equals"]').click();
-  } else if (event.key === 'Backspace') {
-    expression = expression.slice(0, -1); render();
-  } else if (event.key === 'Escape') {
-    expression = ''; message.textContent = ''; render();
-  }
+document.querySelector('#logout').addEventListener('click', () => {
+  sessionStorage.removeItem(SESSION_KEY);
+  showForm(); form.reset(); message.textContent = ''; setMode('login');
 });
+try {
+  const sessionEmail = sessionStorage.getItem(SESSION_KEY);
+  if (sessionEmail && Object.hasOwn(getUsers(), sessionEmail)) showLoggedIn(sessionEmail);
+} catch { /* Continue in logged-out mode if storage is unavailable. */ }

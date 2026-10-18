@@ -3,26 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculator | OIBSIP</title>
+  <title>Demo Login | OIBSIP</title>
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 </head>
 <body>
-  <main class="calculator">
-    <h1>Calculator</h1>
-    <input id="display" aria-label="Calculator display" value="0" readonly>
-    <div class="keys">
-      <button data-action="clear" class="utility">AC</button>
-      <button data-action="delete" class="utility">DEL</button>
-      <button data-value="/" class="operator">÷</button>
-      <button data-value="*" class="operator">×</button>
-      <button data-value="7">7</button><button data-value="8">8</button><button data-value="9">9</button><button data-value="-" class="operator">−</button>
-      <button data-value="4">4</button><button data-value="5">5</button><button data-value="6">6</button><button data-value="+" class="operator">+</button>
-      <button data-value="1">1</button><button data-value="2">2</button><button data-value="3">3</button>
-      <button data-action="equals" class="equals">=</button>
-      <button data-value="0" class="zero">0</button><button data-value=".">.</button>
+  <main class="card">
+    <div class="logo" aria-hidden="true">🔐</div>
+    <h1>Welcome</h1>
+    <p class="subtitle">A front-end login demonstration</p>
+    <div id="auth-panel">
+      <div class="tabs" role="tablist" aria-label="Authentication mode">
+        <button class="tab active" type="button" data-mode="login" role="tab" aria-selected="true">Log in</button>
+        <button class="tab" type="button" data-mode="register" role="tab" aria-selected="false">Register</button>
+      </div>
+      <form id="auth-form">
+        <label for="email">Email address</label>
+        <input id="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+        <label for="password">Password</label>
+        <input id="password" type="password" autocomplete="current-password" minlength="8" placeholder="At least 8 characters" required>
+        <div id="confirm-wrap" hidden><label for="confirm-password">Confirm password</label><input id="confirm-password" type="password" autocomplete="new-password" minlength="8"></div>
+        <button class="submit" type="submit" id="submit-button">Log in</button>
+      </form>
+      <p id="message" role="status" aria-live="polite"></p>
     </div>
-    <p id="message" role="status"></p>
+    <section id="welcome-panel" hidden>
+      <h2 id="welcome-title">You're logged in</h2>
+      <p id="welcome-text"></p>
+      <button id="logout" class="submit" type="button">Log out</button>
+    </section>
+    <p class="warning">Demo only: credentials are stored in this browser for learning. Do not use real passwords or deploy this as a real authentication system.</p>
   </main>
 </body>
 </html>
